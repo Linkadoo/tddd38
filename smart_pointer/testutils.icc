@@ -1,0 +1,99 @@
+/*
+ * testutils.icc    For testing smart_pointer.
+ */
+#include <iostream>
+#include <iomanip>
+#include "smart_pointer.h"
+using namespace std;
+
+/*
+ * Functions for tracing object construction and destruction.
+ */
+void trace_constructed(const char* type, void* id, int n_constructed, int n_destructed)
+{
+   cout << "  " << type << " object constructed: "
+	<< n_constructed << " have been constructed, "
+	<< n_destructed  << " have been destructed, "
+	<< n_constructed - n_destructed << " remaining.\n";
+}
+
+void trace_destructed(const char* type, void* id, int n_constructed, int n_destructed)
+{
+   cout << "  " << type << " object destructed: "
+	<< n_constructed << " have been constructed, "
+	<< n_destructed  << " have been destructed, "
+	<< n_constructed - n_destructed << " remaining.\n";
+}
+
+/*
+ * Functions for testing passing smart_pointers as parameter and returning smart_pointers.
+ */
+
+/*
+ * Function taking a smart pointer as a value parameter (copy in).
+ */
+void fun1(smart_pointer sp)
+{
+   cout << "  fun1: entering\n";
+   smart_pointer local(sp);
+   if (sp.operator->() == nullptr)
+      cout << "  fun1: Parameter is a null pointer after initializing local.\n";
+   else
+      cout << "  fun1: Parameter is NOT a null pointer after initializing local.\n";
+
+   // Ingen test av operator-> möjlig för denna enkla smartpekare
+
+   cout << "  fun1: Leaving, local object will be destructed (not visible if null):\n";
+}
+
+/*
+ * Function taking a smart pointer as a reference parameter.
+ */
+void fun2(smart_pointer& sp)
+{
+   cout << "  fun2: Entering\n";
+   smart_pointer local(sp);
+   if (sp.operator->() == nullptr)
+      cout << "  fun2: Parameter is a null pointer after initializing local.\n";
+   else
+      cout << "  fun2: Parameter is NOT a null pointer after initializing local.\n";
+
+   // Ingen test av operator-> möjlig för denna enkla smartpekare
+
+   cout << "  fun2: Leaving, local object will be destructed (not visible if null):\n";
+}
+
+/*
+ * Function taking a smart pointer as a const reference parameter.
+ *
+ * A const smart_pointer cannot be used to initialize a local smart_pointer,
+ * since it will not allow destructive copy.
+ */
+void fun3(const smart_pointer& sp)
+{
+   cout << "  fun3: Entering\n";
+
+   if (sp.operator->() == nullptr)
+      cout << "  fun3: Parameter is a null pointer.\n";
+   else
+      cout << "  fun3: Parameter is NOT a null pointer.\n";
+
+   cout << "  fun3: Leaving\n";
+}
+
+/*
+ * Function returning a smart pointer. This will easily cause problems, since
+ * a temporary, at least semantically, is used in returning the smart_pointer,
+ * and one often in the callee would like to use this object to initialize
+ * or assign another smart_pointer. Since the copy constructor and the copy
+ * assignment operator must have a non-const parameter if the smart pointer
+ * implements destructive copy, they can not be used, since a temporary only
+ * can be bound to a reference, if the reference is const.
+ */
+smart_pointer fun4()
+{
+   cout << "  fun4: Entering, initializing local smart_pointer object\n";
+   smart_pointer local(new int(0xF4));
+   cout << "  fun4: Leaving, returning local smart pointer object.\n";
+   return local;
+}

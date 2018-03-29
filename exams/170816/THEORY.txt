@@ -1,0 +1,27 @@
+a)
+The virtual keyword tells the compiler that the function can be used in a polymorphic context. Say you have two classes that both have a member function with the same name but different implementation. You also have an object of unknown type (decided at runtime). If the object wants to send a function call to its member function something needs to make sure the correct function for that class type is called. This creates overhead which would not be requires otherwise.
+According to the zero overhead principle this is unacceptable and therefore the virtual keyword is needed.
+
+b)
+Mainly to be used as template arguments since it's easier to work with types in template parameters. (?)
+
+c)
+- Overhead is reduced
+- Slicing can occur if catching by value. Say you have an exception e_special that inherits from e and      instance of e_special is caught by the following code:
+catch (e a){...}
+  This will make a call to e's copy constructor (and ignore the e_special part). If the code would catch by reference instead we would get a reference to the original object and the special_e would be caught instead.
+
+d)
+
+class C
+{
+  int i;
+  public:
+  C( int v ) : i{v} {}
+  template <typename T>
+  C(T) = delete;
+};
+
+e)
+noexcept specifier means no exceptions will be thrown by this function.
+noexcept operator will do a compile-time check if expression is declared not to throw an exception

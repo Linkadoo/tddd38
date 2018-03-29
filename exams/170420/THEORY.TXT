@@ -1,0 +1,17 @@
+1.
+???
+
+2.
+template <>
+struct<char> foo;
+
+3.
+static_assert requires a compile-time expression. size is a runtime.
+
+4.
+3 can be implicitly converted to both short and double.
+
+5.
+length is a variadic template which calculates the number of elements for all arguments but the first one (that is how many arguments that is sent into the function -1)
+
+int num = length(2,3,5,12,2.3,'j');

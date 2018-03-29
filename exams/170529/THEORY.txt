@@ -1,0 +1,20 @@
+1.
+Conextually convertible to bool means that the typ can be evaluated as a boolean, for example in an if-statement. This can be done by overloading operator().
+
+2.
+Since you want to allocate space in a constructor it can be benificial to catch exceptions for such things as memory couldnt be allocated.
+
+3.
+No, not in C++17.
+
+4.
+It is generally better to have one general case (?)
+
+
+New answer:
+Function specializations dont overload!!!
+A template function will nevre have its arguments converted by the compiler to match the call.
+A normal function overload is often better.
+
+5. If the class is an abstract base class BUT you want it to have valid implementations for all other virtual functions. You still have to add an implementation for the destructor tho..
+

@@ -1,0 +1,24 @@
+1. max has only one template typename which means there can only be one input type. The example has one double and one int. A fix could be to convert the integer to double:
+max(double(i),d);   
+
+2. An unamed namespace is a namespace without a name. It is only accessible from the file in which it was created and thereby it reduces the number of global parameters in the project.
+
+3. mutable can be used to "repeal" const. If a function is const it can still change a variable that hs the keyword mutable. something something lambda
+
+4. Lets say we have two types T and U:
+class T
+{
+    T(U){ /*...*/}
+    Operator U(){ /*...*/}
+};
+
+5.
+
+class Sample
+{
+    int i_;
+    double d_;
+public:
+    Sample(int i, double d) : i_{i}, d_{d} {}
+    Sample(int i) : Sample(i,0.0) {}
+    Sample(double d) : Sample(0,d)
